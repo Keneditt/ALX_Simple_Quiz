@@ -1,38 +1,39 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('registration-form');
-    const feedbackDiv = document.getElementById('form-feedback');
+// Define the checkAnswer function
+function checkAnswer() {
+    // 1. Identify the correct answer
+    const correctAnswer = "4";
     
-    form.addEventListener('submit', event => {
-        event.preventDefault();
-        
-        // Get input values
-        const username = document.getElementById('username').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const password = document.getElementById('password').value.trim();
-        
-        // Create validation messages without push()
-        const messages = [
-            username.length < 3 ? 'Username must be at least 3 characters long' : null,
-            (!email.includes('@') || (!email.includes('.')) ? 'Email must contain both "@" and "."' : null,
-            password.length < 8 ? 'Password must be at least 8 characters long' : null
-        ].filter(message => message !== null);
-        
-        const isValid = messages.length === 0;
-        
-        // Display feedback
-        feedbackDiv.style.display = "block";
-        
-        if (isValid) {
-            feedbackDiv.textContent = "Registration successful!";
-            feedbackDiv.style.color = "#28a745";
-            feedbackDiv.style.backgroundColor = "#d4edda";
-            feedbackDiv.style.border = "1px solid #c3e6cb";
-            form.reset();
-        } else {
-            feedbackDiv.innerHTML = messages.join('<br>');
-            feedbackDiv.style.color = "#dc3545";
-            feedbackDiv.style.backgroundColor = "#f8d7da";
-            feedbackDiv.style.border = "1px solid #f5c6cb";
-        }
-    });
+    // 2. Retrieve the user's selected answer
+    const selectedOption = document.querySelector('input[name="quiz"]:checked');
+    
+    // 3. Get the feedback element
+    const feedbackElement = document.getElementById('feedback');
+    
+    // 4. Check if an option was selected
+    if (!selectedOption) {
+        feedbackElement.textContent = "Please select an answer first!";
+        feedbackElement.style.color = "#dc3545";
+        feedbackElement.style.backgroundColor = "#f8d7da";
+        return;
+    }
+    
+    // 5. Get the user's answer value
+    const userAnswer = selectedOption.value;
+    
+    // 6. Compare answers and provide feedback
+    if (userAnswer === correctAnswer) {
+        feedbackElement.textContent = "Correct! Well done.";
+        feedbackElement.style.color = "#28a745";
+        feedbackElement.style.backgroundColor = "#d4edda";
+    } else {
+        feedbackElement.textContent = "That's incorrect. Try again!";
+        feedbackElement.style.color = "#dc3545";
+        feedbackElement.style.backgroundColor = "#f8d7da";
+    }
+}
+
+// Add event listener to the submit button
+document.addEventListener('DOMContentLoaded', function() {
+    const submitButton = document.getElementById('submit-answer');
+    submitButton.addEventListener('click', checkAnswer);
 });
